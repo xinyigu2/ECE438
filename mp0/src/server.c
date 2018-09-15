@@ -34,7 +34,7 @@ void *get_in_addr(struct sockaddr *sa)
 	return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-int main(void)
+int main(int argc, char *argv[])
 {
 	int sockfd, new_fd;  // listen on sock_fd, new connection on new_fd
 	struct addrinfo hints, *servinfo, *p;
@@ -100,6 +100,18 @@ int main(void)
 
 	printf("server: waiting for connections...\n");
 
+    char buffer[100];
+    int i;
+    for(i = 0 ; i < 100 ; i++){
+        buffer[i] = 0;
+    }
+    FILE *file;
+    file = fopen(argv[1],"r");
+    if(file == 0){
+        printf("no file????");
+    }
+    
+
 	while(1) {  // main accept() loop
 		sin_size = sizeof their_addr;
 		new_fd = accept(sockfd, (struct sockaddr *)&their_addr, &sin_size);
@@ -115,8 +127,12 @@ int main(void)
 
 		if (!fork()) { // this is the child process
 			close(sockfd); // child doesn't need the listener
-			if (send(new_fd, "Hello, world!", 13, 0) == -1)
+            unsigned char filelength = 0;
+			if (send(new_fd, filelength,1, 0) == -1)
 				perror("send");
+            filelength = fread(buffer, sizeof(char),100,file);
+            if (send(new_fd, buffer,filelength, 0) == -1)
+            perror("send");
 			close(new_fd);
 			exit(0);
 		}
