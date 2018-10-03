@@ -121,7 +121,9 @@ int main(int argc, char *argv[])
       printf("%d\n",port[3]);
       strcat(wget_buf_tail,"Connection: Keep-Alive\n");
       printf("%s\n",wget_buf_tail);
-
+    
+//
+    
     if ((rv = getaddrinfo(argv[1], PORT, &hints, &servinfo)) != 0) {
         fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
         return 1;
@@ -148,7 +150,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "client: failed to connect\n");
         return 2;
     }
-
+//
     inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr),
               s, sizeof s);
     printf("client: connecting to %s\n", s);
